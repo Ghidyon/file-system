@@ -8,23 +8,22 @@ const fs = require('fs');
 */
 
 http.get('http://jsonplaceholder.typicode.com/posts', (res) => {
-    if (res.statusCode !== 200) console.log(`Error ${res.statusCode}`);
 
-    let body = '';
+    let jsonData = '';
     
     res.on('data', chunk_of_data => {
-        body += chunk_of_data;
+        jsonData += chunk_of_data;
     });
 
     res.on('end', () => {
-        try {
-            let json = JSON.parse(body);
-            
-            // * Move json data into file
-            console.log(json);
-            
+        try {            
+            // * Move json data into json file
+            fs.writeFile('result/post.json', jsonData, err => {
+                if (err) throw err;
+                console.log('Added file successfully.');
+            });
         } catch (error) {
             console.error(error.message);
         }
-    })
-}).on('error', error => console.error(error.message));
+    });
+});
