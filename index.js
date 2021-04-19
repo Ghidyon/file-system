@@ -17,13 +17,16 @@ http.get('http://jsonplaceholder.typicode.com/posts', (res) => {
 
     res.on('end', () => {
         try {            
-            // * Move json data into json file
-            fs.writeFile('result/post.json', jsonData, err => {
-                if (err) throw err;
-                console.log('Added file successfully.');
+            // * Create result folder
+            fs.mkdir('result', () => {
+                // * Create json file and write json data into it
+                fs.writeFile('./result/post.json', jsonData, err => {
+                    if (err) throw err;
+                    console.log('Added data successfully.')
+                });
             });
         } catch (error) {
             console.error(error.message);
         }
     });
-});
+}).on('error', (err) => console.error(err.message));
